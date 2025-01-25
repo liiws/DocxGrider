@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35431.28
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocxGrider", "DocxGrider\DocxGrider.csproj", "{57EE6213-C871-43E8-B2A1-460A89AD36EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{57EE6213-C871-43E8-B2A1-460A89AD36EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57EE6213-C871-43E8-B2A1-460A89AD36EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57EE6213-C871-43E8-B2A1-460A89AD36EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57EE6213-C871-43E8-B2A1-460A89AD36EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E2FFA35-4669-42B3-A707-215058F1FB6E}
+	EndGlobalSection
+EndGlobal
