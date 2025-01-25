@@ -94,7 +94,17 @@ namespace DocxGrider
 		}
 
 		/// <summary>
-		/// Replaces first occurrence of text, beginning to search from the <paramref name="element"/> top element.
+		/// Replaces the first occurrence of the text.
+		/// </summary>
+		/// <param name="oldValue">Old value.</param>
+		/// <param name="newValue">New value.</param>
+		public void ReplaceText(string oldValue, string newValue)
+		{
+			ReplaceText(_document.MainDocumentPart.Document.Body, oldValue, newValue);
+		}
+
+		/// <summary>
+		/// Replaces the first occurrence of the text, starts to search from the <paramref name="element"/> top element.
 		/// </summary>
 		/// <param name="element">Element to search inside from.</param>
 		/// <param name="oldValue">Old value.</param>
@@ -268,7 +278,8 @@ namespace DocxGrider
 		{
 			var rows = table.ChildElements.OfType<TableRow>().ToList();
 			var sourceRow = rows[sourceRowIndex];
-			rows[targetRowIndex].InsertBeforeSelf<TableRow>((TableRow)sourceRow.Clone());
+			var newRow = (TableRow)sourceRow.Clone();
+			rows[targetRowIndex].InsertBeforeSelf(newRow);
 		}
 
 		/// <summary>
