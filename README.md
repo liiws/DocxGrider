@@ -4,7 +4,7 @@ DocxGrider is a simple librabry for working with templates in .docx format.
 
 ## Features
 
-* Replace text in body and text box
+* Replace text including text box
 * Insert a copy of the row in table at specified row index
 * Load from file or stream
 * Save to file or stream
