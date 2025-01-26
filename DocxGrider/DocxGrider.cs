@@ -204,7 +204,7 @@ namespace DocxGrider
 
 								textElement.Text = thisText.Substring(0, targetTextsPos - textsPos) + newValue;
 								textsPos += thisText.Length;
-								oldValuePos += thisText.Length;
+								oldValuePos += textsPos - targetTextsPos;
 								continue;
 							}
 						}
