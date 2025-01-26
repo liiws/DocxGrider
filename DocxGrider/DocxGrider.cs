@@ -274,12 +274,13 @@ namespace DocxGrider
 		/// <param name="table">Table.</param>
 		/// <param name="sourceRowIndex">Source row index.</param>
 		/// <param name="targetRowIndex">Row index before which the copy will be inserted.</param>
-		public void InsertRowCopyBefore(Table table, int sourceRowIndex, int targetRowIndex)
+		public TableRow InsertRowCopyBefore(Table table, int sourceRowIndex, int targetRowIndex)
 		{
 			var rows = table.ChildElements.OfType<TableRow>().ToList();
 			var sourceRow = rows[sourceRowIndex];
 			var newRow = (TableRow)sourceRow.Clone();
 			rows[targetRowIndex].InsertBeforeSelf(newRow);
+			return newRow;
 		}
 
 		/// <summary>
