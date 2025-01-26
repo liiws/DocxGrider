@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocxGrider", "DocxGrider\DocxGrider.csproj", "{57EE6213-C871-43E8-B2A1-460A89AD36EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocxGrider.Tests", "DocxGrider.Tests\DocxGrider.Tests.csproj", "{0702F2FA-A5EE-4778-9838-98009513DC9E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{57EE6213-C871-43E8-B2A1-460A89AD36EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57EE6213-C871-43E8-B2A1-460A89AD36EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57EE6213-C871-43E8-B2A1-460A89AD36EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0702F2FA-A5EE-4778-9838-98009513DC9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0702F2FA-A5EE-4778-9838-98009513DC9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0702F2FA-A5EE-4778-9838-98009513DC9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0702F2FA-A5EE-4778-9838-98009513DC9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

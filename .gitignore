@@ -2,3 +2,5 @@
 /DocxGrider/bin
 /DocxGrider/obj
 /packages
+/DocxGrider.Tests/bin
+/DocxGrider.Tests/obj

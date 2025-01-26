@@ -50,7 +50,7 @@ namespace DocxGrider
 			_memoryStream = new MemoryStream();
 			stream.CopyTo(_memoryStream);
 			_memoryStream.Position = 0;
-			var document = WordprocessingDocument.Open(_memoryStream, true);
+			_document = WordprocessingDocument.Open(_memoryStream, true);
 		}
 
 		public void Dispose()
