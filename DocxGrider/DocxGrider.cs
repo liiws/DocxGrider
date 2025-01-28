@@ -237,6 +237,16 @@ namespace DocxGrider
 		}
 
 		/// <summary>
+		/// Returns all tables that are first-level from the body.
+		/// </summary>
+		/// <param name="element">First-level element to search from.</param>
+		/// <returns>First-level tables.</returns>
+		public List<Table> GetParentTables()
+		{
+			return GetParentTablesInner(new OpenXmlElementList(_document.MainDocumentPart.Document.Body), new List<Table>());
+		}
+
+		/// <summary>
 		/// Returns all tables that are first-level from the <paramref name="element"/>.
 		/// </summary>
 		/// <param name="element">First-level element to search from.</param>
@@ -281,6 +291,32 @@ namespace DocxGrider
 			var newRow = (TableRow)sourceRow.Clone();
 			rows[targetRowIndex].InsertBeforeSelf(newRow);
 			return newRow;
+		}
+
+		/// <summary>
+		/// Inserts copy of another row.
+		/// </summary>
+		/// <param name="table">Table.</param>
+		/// <param name="sourceRowIndex">Source row index.</param>
+		/// <param name="targetRowIndex">Row index after which the copy will be inserted.</param>
+		public TableRow InsertRowCopyAfter(Table table, int sourceRowIndex, int targetRowIndex)
+		{
+			var rows = table.ChildElements.OfType<TableRow>().ToList();
+			var sourceRow = rows[sourceRowIndex];
+			var newRow = (TableRow)sourceRow.Clone();
+			rows[targetRowIndex].InsertAfterSelf(newRow);
+			return newRow;
+		}
+
+		/// <summary>
+		/// Removes specified table row.
+		/// </summary>
+		/// <param name="table">Table.</param>
+		/// <param name="iowIndex">Row index to remove.</param>
+		public void RemoveTableRow(Table table, int rowIndex)
+		{
+			var rows = table.ChildElements.OfType<TableRow>().ToList();
+			rows[rowIndex].Remove();
 		}
 
 		/// <summary>
