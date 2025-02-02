@@ -1,18 +1,25 @@
 # DocxGrider
 
-DocxGrider is a simple librabry for working with templates in .docx format.
+DocxGrider is a very simple library for working with templates in .docx format.
 
 ## Features
 
-* Replace text including text box
-* Insert a copy of the row in table at specified row index
+* Replace text including text box ([NPOI can't yet](https://github.com/nissl-lab/npoi/issues/1478))
+* Insert copy of the row in the table at specified row index
+* Delete table row
 * Load from file or stream
 * Save to file or stream
+* Protect document with password (MSO 2007 legacy implementation)
+* Very fast and doesn't require Office installed (uses Open XML SDK)
+
+Not much, but enough for many templating purposes.
+
+In any case it's possible to get OpenXML document with `GetXmlDocument()` and look at some [examples](https://github.com/OfficeDev/open-xml-docs/tree/main/samples/word) how to work with it.
 
 ## How to use
 
 ```cs
-using (var fs = new FileStream("textbox.docx", FileMode.Open, FileAccess.Read))
+using (var fs = new FileStream("delivery_template.docx", FileMode.Open, FileAccess.Read))
 {
 	using (var dxg = new DocxGrider(fs))
 	{
