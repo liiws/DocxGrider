@@ -10,7 +10,7 @@ using System.Text;
 
 namespace DocxGrider
 {
-	public class DocxGrider : IDisposable
+	public class DocxGrider : IDocxGrider
 	{
 		private WordprocessingDocument _document;
 		private MemoryStream _memoryStream;
@@ -60,15 +60,13 @@ namespace DocxGrider
 			_memoryStream.Dispose();
 		}
 
-		/// <summary>
-		/// Returns DocumentFormat.OpenXml document.
-		/// </summary>
-		/// <returns>DocumentFormat.OpenXml document.</returns>
+		/// <inheritdoc/>
 		public WordprocessingDocument GetXmlDocument()
 		{
 			return _document;
 		}
 
+		/// <inheritdoc/>
 		public void SaveToStream(Stream stream, string password = null)
 		{
 			if (stream == null)
@@ -90,6 +88,7 @@ namespace DocxGrider
 			_memoryStream.CopyTo(stream);
 		}
 
+		/// <inheritdoc/>
 		public void SaveToFile(string filename, string password = null)
 		{
 			if (string.IsNullOrEmpty(filename))
@@ -265,22 +264,13 @@ namespace DocxGrider
 			}
 		}
 
-		/// <summary>
-		/// Replaces the text.
-		/// </summary>
-		/// <param name="oldValue">Old value.</param>
-		/// <param name="newValue">New value.</param>
+		/// <inheritdoc/>
 		public void ReplaceText(string oldValue, string newValue)
 		{
 			ReplaceText(_document.MainDocumentPart.Document.Body, oldValue, newValue);
 		}
 
-		/// <summary>
-		/// Replaces the text, starts to search from the <paramref name="element"/> top element.
-		/// </summary>
-		/// <param name="element">Element to search inside from.</param>
-		/// <param name="oldValue">Old value.</param>
-		/// <param name="newValue">New value.</param>
+		/// <inheritdoc/>
 		public void ReplaceText(OpenXmlElement element, string oldValue, string newValue)
 		{
 			if (element == null)
@@ -408,21 +398,13 @@ namespace DocxGrider
 			}
 		}
 
-		/// <summary>
-		/// Returns all tables that are first-level from the body.
-		/// </summary>
-		/// <param name="element">First-level element to search from.</param>
-		/// <returns>First-level tables.</returns>
+		/// <inheritdoc/>
 		public List<Table> GetParentTables()
 		{
 			return GetParentTablesInner(new OpenXmlElementList(_document.MainDocumentPart.Document.Body), new List<Table>());
 		}
 
-		/// <summary>
-		/// Returns all tables that are first-level from the <paramref name="element"/>.
-		/// </summary>
-		/// <param name="element">First-level element to search from.</param>
-		/// <returns>First-level tables.</returns>
+		/// <inheritdoc/>
 		public List<Table> GetParentTables(OpenXmlElement element)
 		{
 			if (element == null)
@@ -450,12 +432,7 @@ namespace DocxGrider
 			return tables;
 		}
 
-		/// <summary>
-		/// Inserts copy of another row.
-		/// </summary>
-		/// <param name="table">Table.</param>
-		/// <param name="sourceRowIndex">Source row index.</param>
-		/// <param name="targetRowIndex">Row index before which the copy will be inserted.</param>
+		/// <inheritdoc/>
 		public TableRow InsertRowCopyBefore(Table table, int sourceRowIndex, int targetRowIndex)
 		{
 			var rows = table.ChildElements.OfType<TableRow>().ToList();
@@ -465,12 +442,7 @@ namespace DocxGrider
 			return newRow;
 		}
 
-		/// <summary>
-		/// Inserts copy of another row.
-		/// </summary>
-		/// <param name="table">Table.</param>
-		/// <param name="sourceRowIndex">Source row index.</param>
-		/// <param name="targetRowIndex">Row index after which the copy will be inserted.</param>
+		/// <inheritdoc/>
 		public TableRow InsertRowCopyAfter(Table table, int sourceRowIndex, int targetRowIndex)
 		{
 			var rows = table.ChildElements.OfType<TableRow>().ToList();
@@ -480,22 +452,14 @@ namespace DocxGrider
 			return newRow;
 		}
 
-		/// <summary>
-		/// Removes specified table row.
-		/// </summary>
-		/// <param name="table">Table.</param>
-		/// <param name="iowIndex">Row index to remove.</param>
+		/// <inheritdoc/>
 		public void RemoveTableRow(Table table, int rowIndex)
 		{
 			var rows = table.ChildElements.OfType<TableRow>().ToList();
 			rows[rowIndex].Remove();
 		}
 
-		/// <summary>
-		/// Returns rows of the table.
-		/// </summary>
-		/// <param name="table">Table.</param>
-		/// <returns>Rows.</returns>
+		/// <inheritdoc/>
 		public List<TableRow> GetTableRows(Table table)
 		{
 			var rows = table.ChildElements.OfType<TableRow>().ToList();
