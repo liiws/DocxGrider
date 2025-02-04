@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocxGrider", "DocxGrider\DocxGrider.csproj", "{57EE6213-C871-43E8-B2A1-460A89AD36EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocxGrider", "DocxGrider\DocxGrider.csproj", "{57EE6213-C871-43E8-B2A1-460A89AD36EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocxGrider.Tests", "DocxGrider.Tests\DocxGrider.Tests.csproj", "{0702F2FA-A5EE-4778-9838-98009513DC9E}"
 EndProject
