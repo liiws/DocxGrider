@@ -3,7 +3,7 @@
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <Title>DocxGrider</Title>
     <PackageId>DocxGrider</PackageId>
-    <Version>1.2.0.0</Version>
+    <Version>1.2.1.0</Version>
     <Authors>liiws</Authors>
 	<Description>DocxGrider is a very simple library for working with templates in .docx format.</Description>
     <PackageProjectUrl>https://github.com/liiws/DocxGrider</PackageProjectUrl>
@@ -11,8 +11,10 @@
     <PackageTags>docx;msword;word;openxml;office;template</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
   </ItemGroup>
 </Project>
