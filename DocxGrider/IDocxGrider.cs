@@ -90,5 +90,28 @@ namespace DocxGrider
 		/// <param name="table">Table.</param>
 		/// <returns>Rows.</returns>
 		List<TableRow> GetTableRows(Table table);
+
+		/// <summary>
+		/// Finds first element that has specified alternative text.
+		/// </summary>
+		/// <param name="text">Text.</param>
+		/// <param name="element">Element to start from, or document root if not specified.</param>
+		/// <returns>Found element or null.</returns>
+		OpenXmlElement FindElementWithAlternativeText(string text, OpenXmlElement element = null);
+
+		/// <summary>
+		/// Returns all elements of the specified type.
+		/// </summary>
+		/// <typeparam name="T">Type.</typeparam>
+		/// <param name="element">Element to start from, or document root if not specified.</param>
+		/// <returns>Elements.</returns>
+		List<T> GetAllElements<T>(OpenXmlElement element = null) where T : OpenXmlElement;
+
+		/// <summary>
+		/// Removes part of the document (only <see cref="Paragraph"/>, <see cref="Run"/>, <see cref="Table"/>) between page breaks.
+		/// </summary>
+		/// <param name="sectionIndex">0 to remove from beginning to the first page break, 1 from first to second page break, and so on.</param>
+		/// <returns>True if document part was removed, False otherwise.</returns>
+		bool RemovePageBreakPart(int sectionIndex);
 	}
 }

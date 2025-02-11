@@ -23,7 +23,7 @@ namespace DocxGrider
 		{
 			if (stream == null)
 			{
-				new ArgumentNullException(nameof(stream));
+				throw new ArgumentNullException(nameof(stream));
 			}
 
 			LoadDocument(stream);
@@ -37,7 +37,7 @@ namespace DocxGrider
 		{
 			if (string.IsNullOrEmpty(filename))
 			{
-				new ArgumentException($"{nameof(filename)} is empty.");
+				throw new ArgumentException($"{nameof(filename)} is empty.");
 			}
 
 			using (var fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read))
@@ -71,7 +71,7 @@ namespace DocxGrider
 		{
 			if (stream == null)
 			{
-				new ArgumentNullException(nameof(stream));
+				throw new ArgumentNullException(nameof(stream));
 			}
 
 			if (string.IsNullOrEmpty(password))
@@ -93,7 +93,7 @@ namespace DocxGrider
 		{
 			if (string.IsNullOrEmpty(filename))
 			{
-				new ArgumentException($"{nameof(filename)} is empty.");
+				throw new ArgumentException($"{nameof(filename)} is empty.");
 			}
 
 			using (var fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
@@ -275,11 +275,11 @@ namespace DocxGrider
 		{
 			if (element == null)
 			{
-				new ArgumentNullException(nameof(element));
+				throw new ArgumentNullException(nameof(element));
 			}
 			if (string.IsNullOrEmpty(oldValue))
 			{
-				new ArgumentException($"{nameof(oldValue)} is empty.");
+				throw new ArgumentException($"{nameof(oldValue)} is empty.");
 			}
 
 			var sb = new StringBuilder();
@@ -409,7 +409,7 @@ namespace DocxGrider
 		{
 			if (element == null)
 			{
-				new ArgumentNullException(nameof(element));
+				throw new ArgumentNullException(nameof(element));
 			}
 
 			return GetParentTablesInner(element.ChildElements, new List<Table>());
@@ -478,25 +478,260 @@ namespace DocxGrider
 		{
 			if (element == null)
 			{
-				new ArgumentNullException(nameof(element));
+				throw new ArgumentNullException(nameof(element));
 			}
 			if (string.IsNullOrEmpty(oldValue))
 			{
-				new ArgumentException($"{nameof(oldValue)} is empty.");
+				throw new ArgumentException($"{nameof(oldValue)} is empty.");
 			}
 			if (image == null)
 			{
-				new ArgumentNullException(nameof(image));
+				throw new ArgumentNullException(nameof(image));
 			}
 			if (imageType == null)
 			{
-				new ArgumentNullException(nameof(imageType));
+				throw new ArgumentNullException(nameof(imageType));
 			}
 
 			// how to insert image:
 			// https://learn.microsoft.com/en-us/office/open-xml/word/how-to-insert-a-picture-into-a-word-processing-document
 
 			throw new NotImplementedException();
+		}
+
+		public OpenXmlElement FindElementWithAlternativeText(string text, OpenXmlElement element = null)
+		{
+			if (text == null)
+			{
+				text = string.Empty;
+			}
+
+			var foundElement = FindElementWithAlternativeText(new OpenXmlElementList(_document.MainDocumentPart.Document.Body), text);
+			return foundElement;
+		}
+
+		private OpenXmlElement FindElementWithAlternativeText(OpenXmlElementList elements, string text)
+		{
+			foreach (var element in elements)
+			{
+				if (element is DocumentFormat.OpenXml.Drawing.Wordprocessing.DocProperties properties)
+				{
+					if (properties.Description?.Value == text)
+					{
+						return element;
+					}
+				}
+
+				var foundElement = FindElementWithAlternativeText(element.ChildElements, text);
+				if (foundElement != null)
+				{
+					return foundElement;
+				}
+			}
+
+			return null;
+		}
+
+		public List<T> GetAllElements<T>(OpenXmlElement element = null) where T : OpenXmlElement
+		{
+			var elements = new List<T>();
+
+			if (element == null)
+			{
+				element = _document.MainDocumentPart.Document.Body;
+			}
+
+			foreach (var child in element.ChildElements)
+			{
+				if (child is T)
+				{
+					elements.Add((T)child);
+				}
+				else
+				{
+					elements.AddRange(GetAllElements<T>(child));
+				}
+			}
+
+			return elements;
+		}
+
+		/// <summary>
+		/// For development purpose.
+		/// </summary>
+		internal string GetElementTreePositionNumber(OpenXmlElement element)
+		{
+			var path = new List<int>();
+
+			var child = element;
+			var parent = child.Parent;
+			while (parent != null)
+			{
+				var index = -1;
+				for (int i = 0; i < parent.ChildElements.Count; i++)
+				{
+					if (parent.ChildElements[i] == child)
+					{
+						index = i;
+						break;
+					}
+				}
+
+				path.Insert(0, index);
+
+				child = parent;
+				parent = child.Parent;
+			}
+
+			return string.Join("-", path);
+		}
+
+		public bool RemovePageBreakPart(int sectionIndex)
+		{
+			if (sectionIndex < 0)
+			{
+				throw new ArgumentException($"{nameof(sectionIndex)} should be zero or above.");
+			}
+
+			var contentElementTypes = new HashSet<Type>(new[] { typeof(Paragraph), typeof(Run), typeof(Table) });
+
+			Func<OpenXmlElement, bool> isPageBreak = element0 => element0 is Break breakElement0 && breakElement0.Type == BreakValues.Page;
+			OpenXmlElement firstElement = _document.MainDocumentPart.Document;
+			if (sectionIndex == 0)
+			{
+				firstElement = FindFirstElement(firstElement, contentElementTypes, true);
+			}
+			else
+			{
+				for (int i = 0; i < sectionIndex; i++)
+				{
+					firstElement = FindFirstElement(firstElement, new HashSet<Type>(new[] { typeof(Break) }), false, isPageBreak);
+				}
+			}
+
+			if (firstElement == null)
+			{
+				return false;
+			}
+
+			// remove elements till next page break or document end
+
+			// Go recursive (children first sibling next) into firstElement, then next siblings, then siblings of all parents.
+			// If firstElement is not page break then include firstElement itself and parents themselves.
+			// If firstElement is page break then remove it and don't remove next page break; otherwise remove next page break.
+
+			var firstElementIsPageBreak = isPageBreak(firstElement);
+
+			OpenXmlElement parent = firstElement;
+			while (parent != null)
+			{
+				if (parent == _document.MainDocumentPart.Document)
+				{
+					break;
+				}
+
+				OpenXmlElement element = parent;
+				parent = element.Parent;
+
+				var nextSiblings = parent.ChildElements.SkipWhile(r => r != element).ToList();
+				nextSiblings.RemoveAt(0);
+
+				// element itself
+				if (firstElementIsPageBreak)
+				{
+					if (firstElement.Parent != null)
+					{
+						firstElement.Remove();
+					}
+				}
+				else
+				{
+					var pageBreakReached = RemoveElementsTillPageBreak(element, contentElementTypes, isPageBreak, !firstElementIsPageBreak);
+					if (pageBreakReached)
+					{
+						return true;
+					}
+					else
+					{
+						element.Remove();
+					}
+				}
+
+				// element siblings
+				foreach (var nextSibling in nextSiblings)
+				{
+					var pageBreakReached = RemoveElementsTillPageBreak(nextSibling, contentElementTypes, isPageBreak, !firstElementIsPageBreak);
+					if (pageBreakReached)
+					{
+						return true;
+					}
+					else if (contentElementTypes.Contains(nextSibling.GetType()))
+					{
+						nextSibling.Remove();
+					}
+				}
+			}
+
+			return true;
+		}
+
+		private bool RemoveElementsTillPageBreak(OpenXmlElement baseElement, HashSet<Type> elementTypes, Func<OpenXmlElement, bool> isPageBreak, bool removePageBreak)
+		{
+			var children = baseElement.ChildElements.ToList();
+			foreach (var child in children)
+			{
+				if (isPageBreak(child))
+				{
+					if (removePageBreak)
+					{
+						child.Remove();
+					}
+					return true;
+				}
+				var pageBreakReached = RemoveElementsTillPageBreak(child, elementTypes, isPageBreak, removePageBreak);
+				if (pageBreakReached)
+				{
+					return true;
+				}
+				if (elementTypes.Contains(child.GetType()))
+				{
+					child.Remove();
+				}
+			}
+
+			return false;
+		}
+
+		private OpenXmlElement FindFirstElement(
+			OpenXmlElement baseElement,
+			HashSet<Type> elementTypes,
+			bool checkSelf,
+			Func<OpenXmlElement, bool> condition = null)
+		{
+			if (baseElement == null)
+			{
+				return null;
+			}
+
+			if (checkSelf && elementTypes.Contains(baseElement.GetType()))
+			{
+				return baseElement;
+			}
+
+			foreach (var child in baseElement.ChildElements)
+			{
+				if (elementTypes.Contains(child.GetType()))
+				{
+					return child;
+				}
+				var innerElement = FindFirstElement(child, elementTypes, false, condition);
+				if (innerElement != null)
+				{
+					return innerElement;
+				}
+			}
+
+			return null;
 		}
 	}
 }

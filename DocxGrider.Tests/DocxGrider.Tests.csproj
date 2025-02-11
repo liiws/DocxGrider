@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="TestsBase.cs" />
     <Compile Include="TableTests.cs" />
+    <Compile Include="RemovePageBreakPartTests.cs" />
     <Compile Include="TextReplaceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
