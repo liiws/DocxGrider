@@ -18,6 +18,8 @@ In any case it's possible to get OpenXML document with `GetXmlDocument()` and lo
 
 ## How to use
 
+Download sources or install [nuget package](https://www.nuget.org/packages/DocxGrider).
+
 ```cs
 using (var fs = new FileStream("delivery_template.docx", FileMode.Open, FileAccess.Read))
 {
