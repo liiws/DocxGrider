@@ -7,6 +7,7 @@ DocxGrider is a very simple library for working with templates in .docx format.
 * Replace text including text box ([NPOI can't yet](https://github.com/nissl-lab/npoi/issues/1478))
 * Insert copy of the row in the table at specified row index
 * Delete table row
+* Remove document part between page breaks
 * Load from file or stream
 * Save to file or stream
 * Protect document with password (MSO 2007 legacy implementation)
