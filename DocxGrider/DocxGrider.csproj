@@ -3,7 +3,7 @@
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <Title>DocxGrider</Title>
     <PackageId>DocxGrider</PackageId>
-    <Version>1.2.1.0</Version>
+    <Version>1.3.1.0</Version>
     <Authors>liiws</Authors>
 	<Description>DocxGrider is a very simple library for working with templates in .docx format.</Description>
     <PackageProjectUrl>https://github.com/liiws/DocxGrider</PackageProjectUrl>
